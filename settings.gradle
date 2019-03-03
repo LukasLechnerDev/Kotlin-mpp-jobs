@@ -8,5 +8,6 @@ pluginManagement {
     }
 }
 rootProject.name = 'kotlin-mpp-jobs'
+enableFeaturePreview('GRADLE_METADATA')
 
 include ':app'
