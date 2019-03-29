@@ -24,11 +24,11 @@ class MainActivity : AppCompatActivity(), JobsListView, CoroutineScope {
     private val presenter by lazy { JobsListPresenter(this, repository) }
 
     override fun getJobsListSuccess(jobs: List<JobPositionDto>) {
-        // launch {
+        launch {
             textView.visibility = View.VISIBLE
             textView.text = jobs.joinToString("\n\n")
             progressBar.visibility = View.GONE
-        // }
+        }
     }
 
     override fun showProgressIndicator(show: Boolean) {

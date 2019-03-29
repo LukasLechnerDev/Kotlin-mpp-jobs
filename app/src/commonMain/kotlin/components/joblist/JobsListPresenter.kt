@@ -19,9 +19,7 @@ class JobsListPresenter(
 
         launch(IoDispatcher) {
             val data = repository.getJobsList()
-            withContext(Dispatchers.Main){
-                view.getJobsListSuccess(data)
-            }
+            view.getJobsListSuccess(data)
         }.invokeOnCompletion {
             view.showProgressIndicator(false)
         }
