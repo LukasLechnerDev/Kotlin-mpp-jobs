@@ -5,9 +5,7 @@ class ViewController: UIViewController, JobsListView {
     
     @IBOutlet weak var label: UILabel!
     
-    private lazy var api = GithubJobsApi()
-    private lazy var repository = JobPositionRepositoryImpl(apiService: api)
-    private lazy var presenter = JobsListPresenter(view: self,repository: repository)
+    private lazy var presenter = JobsListPresenter(view: self)
     
     override func viewDidLoad() {
         super.viewDidLoad()

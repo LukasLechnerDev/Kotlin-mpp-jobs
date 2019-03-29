@@ -1,18 +1,17 @@
 package components.joblist
 
+import api.GithubJobsApi
 import api.IoDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import presentation.BasePresenter
 import presentation.JobsListView
-import repository.JobPositionRepository
-import kotlin.coroutines.CoroutineContext
+import repository.*
 
 class JobsListPresenter(
-    private val view: JobsListView,
-    private val repository: JobPositionRepository
+    private val view: JobsListView
 ) : BasePresenter(view) {
+
+    private val repository = JobPositionRepositoryImpl(GithubJobsApi())
 
     fun getJobsList() {
         view.showProgressIndicator(true)

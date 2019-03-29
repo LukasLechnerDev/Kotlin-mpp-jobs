@@ -8,7 +8,6 @@ import components.joblist.JobsListPresenter
 import presentation.JobsListView
 import androidx.appcompat.app.AppCompatActivity
 import components.joblist.model.JobPositionDto
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -20,8 +19,7 @@ class MainActivity : AppCompatActivity(), JobsListView, CoroutineScope {
     val progressBar: ProgressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }
     val textView: TextView by lazy { findViewById<TextView>(R.id.textView)}
 
-    private val repository by lazy { (application as MppJobsApplication).jobPositionsRepository }
-    private val presenter by lazy { JobsListPresenter(this, repository) }
+    private val presenter by lazy { JobsListPresenter(this) }
 
     override fun getJobsListSuccess(jobs: List<JobPositionDto>) {
         launch {
@@ -32,12 +30,14 @@ class MainActivity : AppCompatActivity(), JobsListView, CoroutineScope {
     }
 
     override fun showProgressIndicator(show: Boolean) {
-        if (show) {
-            textView.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
-        } else {
-            textView.visibility = View.VISIBLE
-            progressBar.visibility = View.GONE
+        launch {
+            if (show) {
+                textView.visibility = View.GONE
+                progressBar.visibility = View.VISIBLE
+            } else {
+                textView.visibility = View.VISIBLE
+                progressBar.visibility = View.GONE
+            }
         }
     }
 
