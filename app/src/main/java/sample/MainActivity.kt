@@ -3,26 +3,32 @@ package sample
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
-import androidx.appcompat.app.AppCompatActivity
-import api.GithubJobsApi
+import android.widget.TextView
 import components.joblist.JobsListPresenter
+import presentation.JobsListView
+import androidx.appcompat.app.AppCompatActivity
 import components.joblist.model.JobPositionDto
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
-import presentation.JobsListView
 import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity(), JobsListView {
+class MainActivity : AppCompatActivity(), JobsListView, CoroutineScope {
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main
 
     val progressBar: ProgressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }
+    val textView: TextView by lazy { findViewById<TextView>(R.id.textView)}
 
     private val repository by lazy { (application as MppJobsApplication).jobPositionsRepository }
-    private val presenter by lazy { JobsListPresenter(Dispatchers.Main, this, repository) }
+    private val presenter by lazy { JobsListPresenter(this, repository) }
 
     override fun getJobsListSuccess(jobs: List<JobPositionDto>) {
-        textView.visibility = View.VISIBLE
-        textView.text = jobs.joinToString("\n\n")
-        progressBar.visibility = View.GONE
+        // launch {
+            textView.visibility = View.VISIBLE
+            textView.text = jobs.joinToString("\n\n")
+            progressBar.visibility = View.GONE
+        // }
     }
 
     override fun showProgressIndicator(show: Boolean) {

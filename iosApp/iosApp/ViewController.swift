@@ -1,7 +1,6 @@
 import UIKit
 import main
 
-
 class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()

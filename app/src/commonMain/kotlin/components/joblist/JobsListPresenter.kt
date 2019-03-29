@@ -1,5 +1,7 @@
 package components.joblist
 
+import api.IoDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import presentation.BasePresenter
@@ -8,23 +10,20 @@ import repository.JobPositionRepository
 import kotlin.coroutines.CoroutineContext
 
 class JobsListPresenter(
-    private val uiContext: CoroutineContext,
     private val view: JobsListView,
     private val repository: JobPositionRepository
-) : BasePresenter(uiContext, view) {
+) : BasePresenter(view) {
 
     fun getJobsList() {
         view.showProgressIndicator(true)
 
-        launch(coroutineContext) {
+        launch(IoDispatcher) {
             val data = repository.getJobsList()
-            withContext(uiContext) {
+            withContext(Dispatchers.Main){
                 view.getJobsListSuccess(data)
             }
         }.invokeOnCompletion {
             view.showProgressIndicator(false)
         }
-
     }
-
 }
