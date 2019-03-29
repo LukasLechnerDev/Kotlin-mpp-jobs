@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kotlin-mpp-jobs.iml" filepath="$PROJECT_DIR$/kotlin-mpp-jobs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/kotlin-mpp-jobs.app.commonMain.iml" filepath="$PROJECT_DIR$/app/kotlin-mpp-jobs.app.commonMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/kotlin-mpp-jobs.app.commonTest.iml" filepath="$PROJECT_DIR$/app/kotlin-mpp-jobs.app.commonTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/kotlin-mpp-jobs.app.iosMain.iml" filepath="$PROJECT_DIR$/app/kotlin-mpp-jobs.app.iosMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/kotlin-mpp-jobs.app.iosTest.iml" filepath="$PROJECT_DIR$/app/kotlin-mpp-jobs.app.iosTest.iml" />
+    </modules>
+  </component>
+</project>
