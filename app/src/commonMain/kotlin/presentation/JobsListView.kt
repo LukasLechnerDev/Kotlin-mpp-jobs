@@ -1,7 +1,7 @@
 package presentation
 
-import components.joblist.model.JobPositionDto
+import components.joblist.model.JobPosition
 
 interface JobsListView: BaseView {
-    fun getJobsListSuccess(jobs: List<JobPositionDto>)
+    fun getJobsListSuccess(jobs: List<JobPosition>)
 }

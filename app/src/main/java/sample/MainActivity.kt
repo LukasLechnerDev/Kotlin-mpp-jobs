@@ -3,28 +3,43 @@ package sample
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.TextView
 import components.joblist.JobsListPresenter
 import presentation.JobsListView
 import androidx.appcompat.app.AppCompatActivity
-import components.joblist.model.JobPositionDto
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import components.joblist.model.JobPosition
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity(), JobsListView, CoroutineScope {
 
+    private lateinit var job: Job
+
     override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
+        get() = job + Main
 
-    val progressBar: ProgressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }
-    val textView: TextView by lazy { findViewById<TextView>(R.id.textView)}
+    private val progressBar: ProgressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }
+    private val recyclerView by lazy { findViewById<RecyclerView>(R.id.recyclerView) }
 
+    private val adapter = JobListAdapter()
     private val presenter by lazy { JobsListPresenter(this) }
 
-    override fun getJobsListSuccess(jobs: List<JobPositionDto>) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        job = Job()
+        presenter.getJobsList()
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+    }
+
+    override fun getJobsListSuccess(jobs: List<JobPosition>) {
         launch {
-            textView.visibility = View.VISIBLE
-            textView.text = jobs.joinToString("\n\n")
+            adapter.updateData(jobs)
             progressBar.visibility = View.GONE
         }
     }
@@ -32,10 +47,10 @@ class MainActivity : AppCompatActivity(), JobsListView, CoroutineScope {
     override fun showProgressIndicator(show: Boolean) {
         launch {
             if (show) {
-                textView.visibility = View.GONE
+                recyclerView.visibility = View.GONE
                 progressBar.visibility = View.VISIBLE
             } else {
-                textView.visibility = View.VISIBLE
+                recyclerView.visibility = View.VISIBLE
                 progressBar.visibility = View.GONE
             }
         }
@@ -45,17 +60,9 @@ class MainActivity : AppCompatActivity(), JobsListView, CoroutineScope {
 
     }
 
-    // val recyclerView by lazy { findViewById<RecyclerView>(R.id.recyclerView) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        presenter.getJobsList()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
+        job.cancel()
         presenter.onDestroy()
     }
 }

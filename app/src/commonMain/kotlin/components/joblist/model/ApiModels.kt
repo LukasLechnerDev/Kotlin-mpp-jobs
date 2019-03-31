@@ -15,4 +15,8 @@ data class JobPositionDto(
     val location: String,
 
     @SerialName("title")
-    val title: String)
+    val title: String,
+
+    @SerialName("type")
+    val type: String
+)
