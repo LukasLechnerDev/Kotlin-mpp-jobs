@@ -5,7 +5,7 @@ import api.IoDispatcher
 import kotlinx.coroutines.launch
 import presentation.BasePresenter
 import presentation.JobsListView
-import repository.*
+import repository.JobPositionRepositoryImpl
 
 class JobsListPresenter(
     private val view: JobsListView
@@ -17,8 +17,12 @@ class JobsListPresenter(
         view.showProgressIndicator(true)
 
         launch(IoDispatcher) {
-            val data = repository.getJobsList()
-            view.getJobsListSuccess(data)
+            repository.getJobsList().fold({
+                view.getJobsListSuccess(it)
+            }, {
+                view.showError(Throwable("Loading Jobs failed"))
+            })
+
         }.invokeOnCompletion {
             view.showProgressIndicator(false)
         }

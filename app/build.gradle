@@ -9,6 +9,7 @@ repositories {
     maven { url "https://kotlin.bintray.com/kotlinx" }
     maven { url "https://dl.bintray.com/kotlin/ktor" }
     maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+    maven { url = 'https://dl.bintray.com/russhwolf/multiplatform-settings' }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
@@ -27,6 +28,11 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+        }
+        //This is for MultiplatformSettings
+        debug {
+            // MPP libraries don't currently get this resolution automatically
+            matchingFallbacks = ['release']
         }
     }
 
@@ -71,6 +77,7 @@ kotlin {
                 implementation "io.ktor:ktor-client-core:$ktor_version"
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutines_version"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialization_version"
+                implementation "com.russhwolf:multiplatform-settings:0.2"
             }
         }
         commonTest {
