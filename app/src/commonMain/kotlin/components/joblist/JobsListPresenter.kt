@@ -2,6 +2,7 @@ package components.joblist
 
 import api.GithubJobsApi
 import api.IoDispatcher
+import common.UiState
 import kotlinx.coroutines.launch
 import presentation.BasePresenter
 import presentation.JobsListView
@@ -14,17 +15,14 @@ class JobsListPresenter(
     private val repository = JobPositionRepositoryImpl(GithubJobsApi())
 
     fun getJobsList() {
-        view.showProgressIndicator(true)
+        view.render(UiState.Loading())
 
         launch(IoDispatcher) {
             repository.getJobsList().fold({
-                view.getJobsListSuccess(it)
+                view.render(UiState.Success(it))
             }, {
-                view.showError(Throwable("Loading Jobs failed"))
+                view.render(UiState.Error(Throwable("Loading Jobs failed")))
             })
-
-        }.invokeOnCompletion {
-            view.showProgressIndicator(false)
         }
     }
 }

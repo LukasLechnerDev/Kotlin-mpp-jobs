@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import common.UiState
 import components.joblist.model.JobPosition
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
@@ -37,27 +38,38 @@ class MainActivity : AppCompatActivity(), JobsListView, CoroutineScope {
         recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
     }
 
-    override fun getJobsListSuccess(jobs: List<JobPosition>) {
+    override fun render(uiState: UiState<List<JobPosition>>) {
+        when (uiState) {
+            is UiState.Success -> {
+                displayJobList(uiState.data)
+            }
+            is UiState.Loading -> {
+                displayProgress()
+            }
+            is UiState.Error -> {
+                displayError(uiState.throwable)
+            }
+        }
+    }
+
+    private fun displayJobList(jobs: List<JobPosition>) {
         launch {
+            recyclerView.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
             adapter.updateData(jobs)
             progressBar.visibility = View.GONE
         }
     }
 
-    override fun showProgressIndicator(show: Boolean) {
+    private fun displayProgress() {
         launch {
-            if (show) {
                 recyclerView.visibility = View.GONE
                 progressBar.visibility = View.VISIBLE
-            } else {
-                recyclerView.visibility = View.VISIBLE
-                progressBar.visibility = View.GONE
-            }
         }
     }
 
-    override fun showError(error: Throwable) {
-
+    private fun displayError(error: Throwable?) {
+        // show error screen
     }
 
     override fun onDestroy() {

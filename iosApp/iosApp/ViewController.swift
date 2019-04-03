@@ -36,17 +36,31 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.didReceiveMemoryWarning()
     }
     
-    func showProgressIndicator(show: Bool) {
-       print("showProgressIndicator \(show) called")
+    func render(uiState: UiState) {
+        if(uiState is UiState.Success){
+            let state = uiState as! UiState.Success
+            displayJobList(jobs: state.data as! [JobPosition])
+        }
+        if(uiState is UiState.Loading){
+            displayProgress()
+        }
+        if(uiState is UiState.Error){
+            let state = uiState as! UiState.Error
+            displayError(error: state.throwable as! KotlinThrowable)
+        }
     }
     
-    func showError(error: KotlinThrowable) {
-        print("showError called: \(error)")
-    }
-    
-    func getJobsListSuccess(jobs: [JobPosition]) {
+    private func displayJobList(jobs: [JobPosition]) {
         print("getJobsListSuccess with \(jobs.count) jobs called")
         self.jobs = jobs
         jobsTableView.reloadData()
+    }
+    
+    private func displayProgress() {
+       print("showProgressIndicator called")
+    }
+    
+    func displayError(error: KotlinThrowable) {
+        print("showError called: \(error)")
     }
 }
